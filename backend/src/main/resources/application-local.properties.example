@@ -1,0 +1,6 @@
+# Copy to application-local.properties (gitignored) for local development.
+# Or set environment variables instead.
+
+spring.datasource.password=your_postgres_password
+app.jwt.secret=KeystoneDevSecretKeyMustBeAtLeast32CharsLong!
+app.seed.demo=true

@@ -1,25 +1,44 @@
 :root {
-  --primary: #2563eb;
-  --primary-hover: #1d4ed8;
+  /* Keystone — Precision Field Ops */
+  --ink: #0b1220;
+  --ink-soft: #151d2e;
+  --ink-muted: #243049;
 
-  --background: #f8fafc;
+  --accent: #0f766e;
+  --accent-hover: #0d9488;
+  --accent-soft: #ccfbf1;
+  --accent-glow: rgba(20, 184, 166, 0.35);
+
+  --primary: var(--accent);
+  --primary-hover: var(--accent-hover);
+
+  --background: #f1f4f6;
   --surface: #ffffff;
+  --surface-elevated: #fafbfc;
 
   --text-primary: #0f172a;
-  --text-secondary: #64748b;
+  --text-secondary: #5b6b7c;
+  --text-inverse: #f8fafc;
 
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #0284c7;
 
-  --border: #e2e8f0;
+  --border: #e2e8ef;
+  --border-strong: #cbd5e1;
 
-  --shadow:
-    0 10px 30px rgba(0,0,0,.08);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
 
-  --glass:
-    rgba(255,255,255,.55);
+  --shadow-sm: 0 1px 2px rgba(11, 18, 32, 0.04);
+  --shadow: 0 8px 24px rgba(11, 18, 32, 0.06);
+  --shadow-lg: 0 18px 40px rgba(11, 18, 32, 0.1);
 
-  --glass-border:
-    rgba(255,255,255,.25);
+  --font-display: "Outfit", system-ui, sans-serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.35);
 }

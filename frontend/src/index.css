@@ -1,7 +1,104 @@
 @import "tailwindcss";
 @import "./styles/theme.css";
 
-body{
-    font-family: "Inter", sans-serif;
-    background:#f8fafc;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    background-color: var(--background);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 0% -10%, rgba(15, 118, 110, 0.08), transparent 55%),
+      radial-gradient(ellipse 60% 40% at 100% 0%, rgba(11, 18, 32, 0.05), transparent 50%),
+      linear-gradient(180deg, #f5f7f9 0%, #eef2f5 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: rgba(15, 118, 110, 0.2);
+  }
+}
+
+@layer utilities {
+  .ks-grid-bg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .ks-fade-in {
+    animation: ks-fade-in 0.45s ease-out both;
+  }
+
+  .ks-slide-up {
+    animation: ks-slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .ks-stagger > * {
+    animation: ks-slide-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .ks-stagger > *:nth-child(1) { animation-delay: 0.02s; }
+  .ks-stagger > *:nth-child(2) { animation-delay: 0.06s; }
+  .ks-stagger > *:nth-child(3) { animation-delay: 0.1s; }
+  .ks-stagger > *:nth-child(4) { animation-delay: 0.14s; }
+  .ks-stagger > *:nth-child(5) { animation-delay: 0.18s; }
+  .ks-stagger > *:nth-child(6) { animation-delay: 0.22s; }
+  .ks-stagger > *:nth-child(7) { animation-delay: 0.26s; }
+  .ks-stagger > *:nth-child(8) { animation-delay: 0.3s; }
+  .ks-stagger > *:nth-child(9) { animation-delay: 0.34s; }
+}
+
+@keyframes ks-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes ks-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+
+  aside,
+  nav,
+  header,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  #invoice-print {
+    box-shadow: none !important;
+    border: none !important;
+  }
 }

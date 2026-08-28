@@ -1,11 +1,21 @@
-import "@fontsource/inter";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      newestOnTop
+      closeOnClick
+      pauseOnHover
+      theme="light"
+      toastClassName="!rounded-xl !border !border-slate-200 !font-[inherit] !text-sm"
+    />
   </React.StrictMode>
 );

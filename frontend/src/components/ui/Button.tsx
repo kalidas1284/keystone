@@ -1,42 +1,38 @@
-import React from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { cn } from "../../utils/helpers";
 
-type ButtonProps = {
-  children: React.ReactNode;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary" | "danger";
-  onClick?: () => void;
-  className?: string;
-  disabled?: boolean;
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  children: ReactNode;
+  variant?: "primary" | "secondary" | "danger" | "ghost";
 };
 
 function Button({
   children,
   type = "button",
   variant = "primary",
-  onClick,
   className = "",
   disabled = false,
+  ...rest
 }: ButtonProps) {
-  const baseStyle =
-    "px-5 py-2.5 rounded-lg font-medium transition-all duration-300";
-
   const variants = {
     primary:
-      "bg-blue-600 text-white hover:bg-blue-700 shadow-md hover:shadow-lg",
-
+      "bg-[var(--accent)] text-white shadow-sm hover:bg-[var(--accent-hover)] hover:shadow-md active:translate-y-px",
     secondary:
-      "bg-slate-200 text-slate-700 hover:bg-slate-300",
-
-    danger:
-      "bg-red-500 text-white hover:bg-red-600",
+      "border border-[var(--border)] bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50",
+    danger: "bg-[var(--danger)] text-white hover:bg-red-700 shadow-sm",
+    ghost: "bg-transparent text-slate-600 hover:bg-slate-100/80",
   };
 
   return (
     <button
       type={type}
-      onClick={onClick}
       disabled={disabled}
-      className={`${baseStyle} ${variants[variant]} ${className}`}
+      className={cn(
+        "inline-flex items-center justify-center rounded-[var(--radius-md)] px-4 py-2.5 text-sm font-semibold tracking-tight transition duration-200 disabled:cursor-not-allowed disabled:opacity-55",
+        variants[variant],
+        className
+      )}
+      {...rest}
     >
       {children}
     </button>
