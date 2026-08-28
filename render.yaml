@@ -43,11 +43,10 @@ services:
           name: keystone-db
           property: password
 
-  # React SPA (static site)
+  # React SPA (static site — no compute plan; static sites are free on CDN)
   - type: web
     name: keystone-web
     runtime: static
-    plan: free
     buildCommand: npm install --prefix frontend && npm run build --prefix frontend
     staticPublishPath: frontend/dist
     routes:
