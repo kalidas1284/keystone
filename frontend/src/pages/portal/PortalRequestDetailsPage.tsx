@@ -8,13 +8,13 @@ import ErrorMessage from "../../components/ui/ErrorMessage";
 import Loader from "../../components/ui/Loader";
 import { getErrorMessage } from "../../services/api";
 import portalService from "../../services/portalService";
-import type { WorkOrder } from "../../types/domain";
+import type { PortalWorkOrder } from "../../types/domain";
 import { formatDateTime } from "../../utils/helpers";
 import { priorityTone, slaTone, statusTone } from "../../utils/status";
 
 function PortalRequestDetailsPage() {
   const { id } = useParams();
-  const [request, setRequest] = useState<WorkOrder | null>(null);
+  const [request, setRequest] = useState<PortalWorkOrder | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,12 +74,6 @@ function PortalRequestDetailsPage() {
             <span className="text-slate-500">Completed:</span> {formatDateTime(request.completedAt)}
           </p>
         </div>
-        {request.notes && (
-          <div>
-            <h3 className="mb-1 font-medium text-slate-900">Notes</h3>
-            <p className="whitespace-pre-wrap text-sm text-slate-600">{request.notes}</p>
-          </div>
-        )}
       </Card>
 
       {request.statusHistory && request.statusHistory.length > 0 && (

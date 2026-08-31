@@ -260,6 +260,7 @@ function WorkOrderDetailsPage() {
     order.totalLaborMinutes != null
       ? Number(order.totalLaborMinutes)
       : timeLogs.reduce((sum, log) => sum + Number(log.minutes), 0);
+  const isTerminal = order.status === "CLOSED" || order.status === "CANCELLED";
 
   return (
     <div className="space-y-6">
@@ -270,7 +271,7 @@ function WorkOrderDetailsPage() {
           <p className="mt-1 text-sm text-slate-500">{order.customerName}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {canManage && (
+          {canManage && !isTerminal && (
             <>
               <Link to={`/work-orders/${order.id}/edit`}>
                 <Button variant="secondary">Edit</Button>
@@ -390,6 +391,7 @@ function WorkOrderDetailsPage() {
             <h2 className="font-semibold text-slate-900">Time Tracking</h2>
             <Badge tone="info">{totalMinutes.toFixed(0)} min</Badge>
           </div>
+          {!isTerminal ? (
           <form className="mb-4 grid gap-2 sm:grid-cols-[120px_1fr_auto]" onSubmit={submitTime}>
             <Input
               type="number"
@@ -406,6 +408,9 @@ function WorkOrderDetailsPage() {
             />
             <Button type="submit">Log Time</Button>
           </form>
+          ) : (
+            <p className="mb-4 text-sm text-slate-500">Time cannot be logged on closed or cancelled work orders.</p>
+          )}
           {timeLogs.length === 0 ? (
             <EmptyState title="No time logged yet" />
           ) : (
@@ -435,7 +440,7 @@ function WorkOrderDetailsPage() {
           <p className="mb-4 text-xs text-slate-500">
             Total parts amount: ${totalPartsAmount.toFixed(2)}
           </p>
-          {canUseParts ? (
+          {canUseParts && !isTerminal ? (
             inventory.length === 0 ? (
               <p className="mb-4 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
                 No inventory items available. Add stock under Inventory, then refresh this page.
@@ -461,7 +466,11 @@ function WorkOrderDetailsPage() {
               </form>
             )
           ) : (
-            <p className="mb-3 text-sm text-slate-500">Parts can be logged by technicians or managers.</p>
+            <p className="mb-3 text-sm text-slate-500">
+              {isTerminal
+                ? "Parts cannot be added to closed or cancelled work orders."
+                : "Parts can be logged by technicians or managers."}
+            </p>
           )}
           {parts.length === 0 ? (
             <EmptyState title="No parts used yet" />
@@ -489,6 +498,7 @@ function WorkOrderDetailsPage() {
       <Card>
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h2 className="font-semibold text-slate-900">Attachments</h2>
+          {!isTerminal && (
           <label className="inline-flex cursor-pointer items-center">
             <span className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700">
               {uploading ? "Uploading..." : "Upload file"}
@@ -505,6 +515,7 @@ function WorkOrderDetailsPage() {
               }}
             />
           </label>
+          )}
         </div>
         {attachments.length === 0 ? (
           <EmptyState title="No files attached" description="Photos, PDFs, and docs up to 10MB." />
@@ -553,7 +564,7 @@ function WorkOrderDetailsPage() {
                   >
                     Download
                   </Button>
-                  {canManage && (
+                  {canManage && !isTerminal && (
                     <Button
                       variant="danger"
                       className="!px-2 !py-1 text-xs"

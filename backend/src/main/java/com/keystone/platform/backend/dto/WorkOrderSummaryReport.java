@@ -7,6 +7,7 @@ public record WorkOrderSummaryReport(
         long scheduled,
         long inProgress,
         long completed,
+        long closed,
         long cancelled,
         long onHold
 ) {

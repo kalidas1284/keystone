@@ -109,6 +109,24 @@ export interface WorkOrder {
   statusHistory?: StatusHistoryEntry[];
 }
 
+/** Customer portal view — excludes internal cost totals, notes, and IDs. */
+export interface PortalWorkOrder {
+  id: number;
+  workOrderNumber: string;
+  title: string;
+  description?: string | null;
+  priority: WorkOrderPriority;
+  status: WorkOrderStatus;
+  location?: string | null;
+  slaDueAt?: string | null;
+  slaStatus?: SlaStatus | null;
+  createdAt: string;
+  updatedAt: string;
+  completedAt?: string | null;
+  technicianName?: string | null;
+  statusHistory?: StatusHistoryEntry[];
+}
+
 export interface StatusHistoryEntry {
   id: number;
   fromStatus?: string | null;
@@ -216,8 +234,18 @@ export interface WorkOrderSummaryReport {
   scheduled: number;
   inProgress: number;
   completed: number;
+  closed: number;
   cancelled: number;
   onHold: number;
+}
+
+export interface SiteSummaryItem {
+  siteId: number;
+  siteName: string;
+  customerName: string;
+  location: string;
+  totalWorkOrders: number;
+  openWorkOrders: number;
 }
 
 export interface CustomerSummaryItem {

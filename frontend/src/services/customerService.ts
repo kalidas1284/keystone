@@ -35,8 +35,11 @@ export async function getCustomerWorkOrders(id: number): Promise<WorkOrder[]> {
   return data;
 }
 
-export async function listCustomerSites(customerId: number): Promise<Site[]> {
-  const { data } = await api.get<Site[]>(`/customers/${customerId}/sites`);
+export async function listCustomerSites(
+  customerId: number,
+  params?: { search?: string; page?: number; size?: number }
+): Promise<PageResponse<Site>> {
+  const { data } = await api.get<PageResponse<Site>>(`/customers/${customerId}/sites`, { params });
   return data;
 }
 

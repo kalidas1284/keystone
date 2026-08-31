@@ -26,6 +26,10 @@ public interface WorkOrderRepository extends JpaRepository<WorkOrder, Long> {
 
     long countByTechnicianIdAndStatusIn(Long technicianId, List<WorkOrderStatus> statuses);
 
+    long countBySiteId(Long siteId);
+
+    long countBySiteIdAndStatus(Long siteId, WorkOrderStatus status);
+
     List<WorkOrder> findTop10ByOrderByCreatedAtDesc();
 
     List<WorkOrder> findByCustomerIdOrderByCreatedAtDesc(Long customerId);

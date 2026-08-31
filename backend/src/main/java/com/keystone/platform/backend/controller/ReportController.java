@@ -4,6 +4,7 @@ import com.keystone.platform.backend.dto.CustomerSummaryItem;
 import com.keystone.platform.backend.dto.DashboardResponse;
 import com.keystone.platform.backend.dto.InventoryReport;
 import com.keystone.platform.backend.dto.TechnicianWorkloadItem;
+import com.keystone.platform.backend.dto.SiteSummaryItem;
 import com.keystone.platform.backend.dto.WorkOrderSummaryReport;
 import com.keystone.platform.backend.service.ReportService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ReportController {
 
     private final ReportService reportService;
 
-    @GetMapping("/dashboard")
+    @GetMapping({"/dashboard", "/summary"})
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER','DISPATCHER')")
     public ResponseEntity<DashboardResponse> dashboard() {
         return ResponseEntity.ok(reportService.dashboard());
@@ -44,6 +45,12 @@ public class ReportController {
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public ResponseEntity<List<CustomerSummaryItem>> customers() {
         return ResponseEntity.ok(reportService.customerSummary());
+    }
+
+    @GetMapping("/sites")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
+    public ResponseEntity<List<SiteSummaryItem>> sites() {
+        return ResponseEntity.ok(reportService.siteSummary());
     }
 
     @GetMapping("/inventory")

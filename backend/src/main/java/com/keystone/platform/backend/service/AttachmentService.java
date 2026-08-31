@@ -67,6 +67,7 @@ public class AttachmentService {
 
         WorkOrder workOrder = workOrderService.getWorkOrder(workOrderId);
         workOrderService.findById(workOrderId);
+        workOrderService.ensureMutable(workOrder);
 
         String original = sanitizeFilename(file.getOriginalFilename());
         String stored = UUID.randomUUID() + "-" + original;
@@ -116,7 +117,9 @@ public class AttachmentService {
 
     @Transactional
     public void delete(Long workOrderId, Long attachmentId) {
+        WorkOrder workOrder = workOrderService.getWorkOrder(workOrderId);
         workOrderService.findById(workOrderId);
+        workOrderService.ensureMutable(workOrder);
         WorkOrderAttachment attachment = attachmentRepository.findById(attachmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Attachment not found"));
         if (!attachment.getWorkOrder().getId().equals(workOrderId)) {

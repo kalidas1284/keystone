@@ -1,13 +1,13 @@
 import api from "./api";
-import type { Invoice, Site, WorkOrder, WorkOrderPriority } from "../types/domain";
+import type { Invoice, PortalWorkOrder, Site, WorkOrderPriority } from "../types/domain";
 
-export async function listMyRequests(): Promise<WorkOrder[]> {
-  const { data } = await api.get<WorkOrder[]>("/portal/requests");
+export async function listMyRequests(): Promise<PortalWorkOrder[]> {
+  const { data } = await api.get<PortalWorkOrder[]>("/portal/requests");
   return data;
 }
 
-export async function getMyRequest(id: number): Promise<WorkOrder> {
-  const { data } = await api.get<WorkOrder>(`/portal/requests/${id}`);
+export async function getMyRequest(id: number): Promise<PortalWorkOrder> {
+  const { data } = await api.get<PortalWorkOrder>(`/portal/requests/${id}`);
   return data;
 }
 
@@ -18,8 +18,8 @@ export async function createMyRequest(payload: {
   siteId: number;
   location?: string;
   notes?: string;
-}): Promise<WorkOrder> {
-  const { data } = await api.post<WorkOrder>("/portal/requests", payload);
+}): Promise<PortalWorkOrder> {
+  const { data } = await api.post<PortalWorkOrder>("/portal/requests", payload);
   return data;
 }
 

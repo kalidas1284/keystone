@@ -8,12 +8,12 @@ import ErrorMessage from "../../components/ui/ErrorMessage";
 import Loader from "../../components/ui/Loader";
 import { getErrorMessage } from "../../services/api";
 import portalService from "../../services/portalService";
-import type { WorkOrder } from "../../types/domain";
+import type { PortalWorkOrder } from "../../types/domain";
 import { formatDateTime } from "../../utils/helpers";
 import { priorityTone, slaTone, statusTone } from "../../utils/status";
 
 function PortalRequestsPage() {
-  const [requests, setRequests] = useState<WorkOrder[]>([]);
+  const [requests, setRequests] = useState<PortalWorkOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

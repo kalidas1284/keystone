@@ -49,6 +49,7 @@ public class WorkOrderOpsService {
     public TimeLogResponse addTimeLog(Long workOrderId, TimeLogRequest request) {
         WorkOrder workOrder = workOrderService.getWorkOrder(workOrderId);
         enforceAccess(workOrder);
+        workOrderService.ensureMutable(workOrder);
 
         WorkOrderTimeLog log = WorkOrderTimeLog.builder()
                 .workOrder(workOrder)
@@ -73,6 +74,7 @@ public class WorkOrderOpsService {
     public WorkOrderPartResponse addPart(Long workOrderId, WorkOrderPartRequest request) {
         WorkOrder workOrder = workOrderService.getWorkOrder(workOrderId);
         enforceAccess(workOrder);
+        workOrderService.ensureMutable(workOrder);
 
         InventoryItem item = inventoryItemRepository.findById(request.inventoryItemId())
                 .orElseThrow(() -> new ValidationException("Inventory item not found"));

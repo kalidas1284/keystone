@@ -2,8 +2,8 @@ package com.keystone.platform.backend.controller;
 
 import com.keystone.platform.backend.dto.InvoiceResponse;
 import com.keystone.platform.backend.dto.PortalRequestCreate;
+import com.keystone.platform.backend.dto.PortalWorkOrderResponse;
 import com.keystone.platform.backend.dto.SiteResponse;
-import com.keystone.platform.backend.dto.WorkOrderResponse;
 import com.keystone.platform.backend.service.PortalService;
 import com.keystone.platform.backend.exception.ResourceNotFoundException;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ public class PortalController {
     private final PortalService portalService;
 
     @GetMapping("/requests")
-    public ResponseEntity<List<WorkOrderResponse>> myRequests() {
+    public ResponseEntity<List<PortalWorkOrderResponse>> myRequests() {
         return ResponseEntity.ok(portalService.myRequests());
     }
 
@@ -39,12 +39,12 @@ public class PortalController {
     }
 
     @GetMapping("/requests/{id}")
-    public ResponseEntity<WorkOrderResponse> getRequest(@PathVariable Long id) {
+    public ResponseEntity<PortalWorkOrderResponse> getRequest(@PathVariable Long id) {
         return ResponseEntity.ok(portalService.getRequest(id));
     }
 
     @PostMapping("/requests")
-    public ResponseEntity<WorkOrderResponse> createRequest(@Valid @RequestBody PortalRequestCreate request) {
+    public ResponseEntity<PortalWorkOrderResponse> createRequest(@Valid @RequestBody PortalRequestCreate request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(portalService.createRequest(request));
     }
 

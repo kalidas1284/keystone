@@ -14,6 +14,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -94,6 +95,7 @@ public class WorkOrder {
     private Instant completedAt;
 
     @OneToMany(mappedBy = "workOrder")
+    @OrderBy("changedAt ASC")
     private List<WorkOrderStatusHistory> statusHistory;
 
     // F6 spec: roll up parts cost + labour time on the work order

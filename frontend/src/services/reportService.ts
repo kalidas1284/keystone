@@ -3,6 +3,7 @@ import type {
   CustomerSummaryItem,
   DashboardStatistics,
   InventoryReport,
+  SiteSummaryItem,
   TechnicianWorkloadItem,
   WorkOrderSummaryReport,
 } from "../types/domain";
@@ -32,12 +33,18 @@ export async function getInventoryReport(): Promise<InventoryReport> {
   return data;
 }
 
+export async function getSiteReport(): Promise<SiteSummaryItem[]> {
+  const { data } = await api.get<SiteSummaryItem[]>("/reports/sites");
+  return data;
+}
+
 const reportService = {
   getDashboard,
   getWorkOrderReport,
   getTechnicianReport,
   getCustomerReport,
   getInventoryReport,
+  getSiteReport,
 };
 
 export default reportService;

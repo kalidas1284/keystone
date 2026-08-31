@@ -27,6 +27,8 @@ function CustomerDetailsPage() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [sites, setSites] = useState<Site[]>([]);
+  const [sitesPage, setSitesPage] = useState(0);
+  const [sitesTotalPages, setSitesTotalPages] = useState(0);
   const [savingSite, setSavingSite] = useState(false);
   const [editingSiteId, setEditingSiteId] = useState<number | null>(null);
   const [siteName, setSiteName] = useState("");
@@ -37,18 +39,25 @@ function CustomerDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const loadSites = async (page = sitesPage) => {
+    if (!id) return;
+    const sitePage = await customerService.listCustomerSites(Number(id), { page, size: 10 });
+    setSites(sitePage.content);
+    setSitesPage(sitePage.page);
+    setSitesTotalPages(sitePage.totalPages);
+  };
+
   const load = async () => {
     if (!id) return;
     setLoading(true);
     try {
-      const [profile, orders, siteList] = await Promise.all([
+      const [profile, orders] = await Promise.all([
         customerService.getCustomer(Number(id)),
         customerService.getCustomerWorkOrders(Number(id)),
-        customerService.listCustomerSites(Number(id)),
       ]);
       setCustomer(profile);
       setWorkOrders(orders);
-      setSites(siteList);
+      await loadSites(0);
       if (canLinkPortal) {
         setPortalUsers(await customerService.listAvailablePortalUsers());
       }
@@ -144,8 +153,7 @@ function CustomerDetailsPage() {
           notes: siteNotes || undefined,
         });
       }
-      const refreshed = await customerService.listCustomerSites(Number(id));
-      setSites(refreshed);
+      await loadSites(sitesPage);
       resetSiteForm();
       toast.success(editingSiteId ? "Site updated" : "Site created");
     } catch (err) {
@@ -316,6 +324,28 @@ function CustomerDetailsPage() {
                 )}
               </div>
             ))}
+          </div>
+        )}
+
+        {sitesTotalPages > 1 && (
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              variant="secondary"
+              disabled={sitesPage <= 0}
+              onClick={() => void loadSites(sitesPage - 1)}
+            >
+              Previous
+            </Button>
+            <span className="text-sm text-slate-500">
+              Page {sitesPage + 1} of {sitesTotalPages}
+            </span>
+            <Button
+              variant="secondary"
+              disabled={sitesPage + 1 >= sitesTotalPages}
+              onClick={() => void loadSites(sitesPage + 1)}
+            >
+              Next
+            </Button>
           </div>
         )}
 

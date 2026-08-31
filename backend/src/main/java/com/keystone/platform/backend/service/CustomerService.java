@@ -132,16 +132,16 @@ public class CustomerService {
     }
 
     @Transactional(readOnly = true)
-    public List<SiteResponse> findSitesForCustomer(Long customerId, String search, Pageable pageable) {
-        // Reuses existing "customer exists" behaviour for consistent errors.
+    public PageResponse<SiteResponse> findSitesForCustomer(Long customerId, String search, Pageable pageable) {
         getCustomer(customerId);
-
-        return siteRepository
-                .searchByCustomerId(customerId, search, pageable)
-                .getContent()
-                .stream()
-                .map(SiteResponse::from)
-                .toList();
+        Page<Site> page = siteRepository.searchByCustomerId(customerId, search, pageable);
+        return new PageResponse<>(
+                page.getContent().stream().map(SiteResponse::from).toList(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
     }
 
     @Transactional

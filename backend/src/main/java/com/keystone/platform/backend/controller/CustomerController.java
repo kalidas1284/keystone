@@ -72,7 +72,7 @@ public class CustomerController {
 
     @GetMapping("/{id}/sites")
     @PreAuthorize("hasAnyRole('ADMIN','MANAGER','DISPATCHER')")
-    public ResponseEntity<List<SiteResponse>> sites(
+    public ResponseEntity<PageResponse<SiteResponse>> sites(
             @PathVariable Long id,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "0") int page,

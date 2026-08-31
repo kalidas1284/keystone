@@ -7,7 +7,9 @@ import com.keystone.platform.backend.dto.InventoryReport;
 import com.keystone.platform.backend.dto.TechnicianWorkloadItem;
 import com.keystone.platform.backend.dto.WorkOrderResponse;
 import com.keystone.platform.backend.dto.WorkOrderSummaryReport;
+import com.keystone.platform.backend.dto.SiteSummaryItem;
 import com.keystone.platform.backend.entity.Customer;
+import com.keystone.platform.backend.entity.Site;
 import com.keystone.platform.backend.entity.InventoryItem;
 import com.keystone.platform.backend.entity.SlaStatus;
 import com.keystone.platform.backend.entity.Technician;
@@ -17,6 +19,7 @@ import com.keystone.platform.backend.entity.WorkOrderStatus;
 import com.keystone.platform.backend.repository.CustomerRepository;
 import com.keystone.platform.backend.repository.InventoryItemRepository;
 import com.keystone.platform.backend.repository.TechnicianRepository;
+import com.keystone.platform.backend.repository.SiteRepository;
 import com.keystone.platform.backend.repository.WorkOrderRepository;
 import com.keystone.platform.backend.util.SlaUtils;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ public class ReportService {
 
     private final CustomerRepository customerRepository;
     private final TechnicianRepository technicianRepository;
+    private final SiteRepository siteRepository;
     private final WorkOrderRepository workOrderRepository;
     private final InventoryItemRepository inventoryItemRepository;
 
@@ -85,7 +89,8 @@ public class ReportService {
                 customerRepository.countByActiveTrue(),
                 technicianRepository.countByActiveTrue(),
                 workOrderRepository.countOpen(TERMINAL),
-                workOrderRepository.countByStatus(WorkOrderStatus.COMPLETED),
+                workOrderRepository.countByStatus(WorkOrderStatus.COMPLETED)
+                        + workOrderRepository.countByStatus(WorkOrderStatus.CLOSED),
                 workOrderRepository.countByPriorityAndStatusNotIn(WorkOrderPriority.URGENT, TERMINAL),
                 inventoryItemRepository.countLowStock() + inventoryItemRepository.countOutOfStock(),
                 slaBreached,
@@ -108,9 +113,29 @@ public class ReportService {
                 workOrderRepository.countByStatus(WorkOrderStatus.SCHEDULED),
                 workOrderRepository.countByStatus(WorkOrderStatus.IN_PROGRESS),
                 workOrderRepository.countByStatus(WorkOrderStatus.COMPLETED),
+                workOrderRepository.countByStatus(WorkOrderStatus.CLOSED),
                 workOrderRepository.countByStatus(WorkOrderStatus.CANCELLED),
                 workOrderRepository.countByStatus(WorkOrderStatus.ON_HOLD)
         );
+    }
+
+    @Transactional(readOnly = true)
+    public List<SiteSummaryItem> siteSummary() {
+        return siteRepository.findAll().stream().map(site -> {
+            long total = workOrderRepository.countBySiteId(site.getId());
+            long open = Arrays.stream(WorkOrderStatus.values())
+                    .filter(s -> s != WorkOrderStatus.CLOSED && s != WorkOrderStatus.CANCELLED)
+                    .mapToLong(s -> workOrderRepository.countBySiteIdAndStatus(site.getId(), s))
+                    .sum();
+            return new SiteSummaryItem(
+                    site.getId(),
+                    site.getName(),
+                    site.getCustomer().getName(),
+                    site.getLocation(),
+                    total,
+                    open
+            );
+        }).toList();
     }
 
     @Transactional(readOnly = true)

@@ -375,6 +375,13 @@ public class WorkOrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Work order not found with id: " + id));
     }
 
+    /** Spec F3: closed/cancelled work orders are immutable for field operations. */
+    public void ensureMutable(WorkOrder workOrder) {
+        if (workOrder.getStatus() == WorkOrderStatus.CLOSED || workOrder.getStatus() == WorkOrderStatus.CANCELLED) {
+            throw new ValidationException("Closed or cancelled work orders cannot be modified");
+        }
+    }
+
     private void enforceTechnicianAccess(WorkOrder workOrder) {
         User current = securityUtils.currentUser();
         if (current.getRole() != Role.TECHNICIAN) {

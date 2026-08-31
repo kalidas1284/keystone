@@ -2,8 +2,8 @@ package com.keystone.platform.backend.service;
 
 import com.keystone.platform.backend.dto.InvoiceResponse;
 import com.keystone.platform.backend.dto.PortalRequestCreate;
+import com.keystone.platform.backend.dto.PortalWorkOrderResponse;
 import com.keystone.platform.backend.dto.SiteResponse;
-import com.keystone.platform.backend.dto.WorkOrderResponse;
 import com.keystone.platform.backend.entity.InvoiceStatus;
 import com.keystone.platform.backend.entity.Customer;
 import com.keystone.platform.backend.entity.Role;
@@ -42,19 +42,19 @@ public class PortalService {
     private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
-    public List<WorkOrderResponse> myRequests() {
+    public List<PortalWorkOrderResponse> myRequests() {
         Customer customer = currentCustomer();
         return workOrderRepository.findByCustomerIdOrderByCreatedAtDesc(customer.getId()).stream()
-                .map(WorkOrderResponse::from)
+                .map(PortalWorkOrderResponse::from)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public WorkOrderResponse getRequest(Long id) {
+    public PortalWorkOrderResponse getRequest(Long id) {
         WorkOrder workOrder = workOrderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Request not found"));
         ensureOwns(workOrder);
-        return WorkOrderResponse.from(workOrder);
+        return PortalWorkOrderResponse.from(workOrder);
     }
 
     @Transactional(readOnly = true)
@@ -85,7 +85,7 @@ public class PortalService {
     }
 
     @Transactional
-    public WorkOrderResponse createRequest(PortalRequestCreate request) {
+    public PortalWorkOrderResponse createRequest(PortalRequestCreate request) {
         Customer customer = currentCustomer();
         if (!customer.isActive()) {
             throw new ValidationException("Customer account is inactive");
@@ -123,7 +123,7 @@ public class PortalService {
                 "/work-orders/" + saved.getId()
         ));
 
-        return WorkOrderResponse.from(saved);
+        return PortalWorkOrderResponse.from(saved);
     }
 
     private Customer currentCustomer() {

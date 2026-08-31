@@ -8,6 +8,7 @@ import reportService from "../../services/reportService";
 import type {
   CustomerSummaryItem,
   InventoryReport,
+  SiteSummaryItem,
   TechnicianWorkloadItem,
   WorkOrderSummaryReport,
 } from "../../types/domain";
@@ -17,6 +18,7 @@ function ReportsPage() {
   const [workOrders, setWorkOrders] = useState<WorkOrderSummaryReport | null>(null);
   const [technicians, setTechnicians] = useState<TechnicianWorkloadItem[]>([]);
   const [customers, setCustomers] = useState<CustomerSummaryItem[]>([]);
+  const [sites, setSites] = useState<SiteSummaryItem[]>([]);
   const [inventory, setInventory] = useState<InventoryReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -25,15 +27,17 @@ function ReportsPage() {
     const load = async () => {
       setLoading(true);
       try {
-        const [wo, tech, cust, inv] = await Promise.all([
+        const [wo, tech, cust, site, inv] = await Promise.all([
           reportService.getWorkOrderReport(),
           reportService.getTechnicianReport(),
           reportService.getCustomerReport(),
+          reportService.getSiteReport(),
           reportService.getInventoryReport(),
         ]);
         setWorkOrders(wo);
         setTechnicians(tech);
         setCustomers(cust);
+        setSites(site);
         setInventory(inv);
       } catch (err) {
         setError(getErrorMessage(err, "Failed to load reports"));
@@ -57,6 +61,7 @@ function ReportsPage() {
         ["In Progress", workOrders.inProgress],
         ["On Hold", workOrders.onHold],
         ["Completed", workOrders.completed],
+        ["Closed", workOrders.closed],
         ["Cancelled", workOrders.cancelled],
       ]
     );
@@ -79,6 +84,11 @@ function ReportsPage() {
         ["Out of Stock", inventory.outOfStock],
         ["Stock Value", Number(inventory.stockValue).toFixed(2)],
       ]
+    );
+    downloadCsv(
+      "keystone-site-summary.csv",
+      ["Site", "Customer", "Location", "Total", "Open"],
+      sites.map((s) => [s.siteName, s.customerName, s.location, s.totalWorkOrders, s.openWorkOrders])
     );
   };
 
@@ -117,6 +127,7 @@ function ReportsPage() {
               <li className="flex justify-between"><span>Assigned</span><span>{workOrders.assigned}</span></li>
               <li className="flex justify-between"><span>Scheduled</span><span>{workOrders.scheduled}</span></li>
               <li className="flex justify-between"><span>On Hold</span><span>{workOrders.onHold}</span></li>
+              <li className="flex justify-between"><span>Closed</span><span>{workOrders.closed}</span></li>
             </ul>
           )}
         </Card>
@@ -176,6 +187,32 @@ function ReportsPage() {
                 <td className="px-4 py-3">{c.totalWorkOrders}</td>
                 <td className="px-4 py-3">{c.openWorkOrders}</td>
                 <td className="px-4 py-3">{c.completedWorkOrders}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
+
+      <Card className="overflow-x-auto !p-0">
+        <div className="border-b border-slate-200 px-4 py-3 font-semibold text-slate-900">Site Summary</div>
+        <table className="min-w-full text-left text-sm">
+          <thead className="bg-slate-50 text-slate-500">
+            <tr>
+              <th className="px-4 py-3 font-medium">Site</th>
+              <th className="px-4 py-3 font-medium">Customer</th>
+              <th className="px-4 py-3 font-medium">Location</th>
+              <th className="px-4 py-3 font-medium">Total</th>
+              <th className="px-4 py-3 font-medium">Open</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sites.map((s) => (
+              <tr key={s.siteId} className="border-t border-slate-100">
+                <td className="px-4 py-3">{s.siteName}</td>
+                <td className="px-4 py-3">{s.customerName}</td>
+                <td className="px-4 py-3">{s.location}</td>
+                <td className="px-4 py-3">{s.totalWorkOrders}</td>
+                <td className="px-4 py-3">{s.openWorkOrders}</td>
               </tr>
             ))}
           </tbody>

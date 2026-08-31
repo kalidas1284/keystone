@@ -68,7 +68,8 @@ function WorkOrderFormPage() {
     const loadSites = async () => {
       if (!form.customerId) return;
       try {
-        const siteList = await customerService.listCustomerSites(form.customerId);
+        const sitePage = await customerService.listCustomerSites(form.customerId, { page: 0, size: 100 });
+        const siteList = sitePage.content;
         setSites(siteList);
         setForm((prev) => {
           const nextSiteId =

@@ -43,10 +43,10 @@ function DashboardPage() {
     { label: "Completed", value: data.completedWorkOrders, hint: "Closed work orders" },
     { label: "Urgent", value: data.urgentWorkOrders, hint: "Priority queue" },
     { label: "Low stock", value: data.lowStockItems, hint: "Inventory alerts" },
-    { label: "Overdue work", value: data.slaBreached, hint: "Past due" },
-    { label: "SLA breached", value: data.slaBreached, hint: "SLA breach" },
+    { label: "SLA breached", value: data.slaBreached, hint: "Past due" },
     { label: "SLA at risk", value: data.slaAtRisk, hint: "Closing window" },
     { label: "SLA on track", value: data.slaOnTrack, hint: "Healthy" },
+    { label: "SLA met", value: data.slaMet, hint: "Completed on time" },
   ];
 
   return (
