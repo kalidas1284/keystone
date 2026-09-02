@@ -53,7 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const bootstrap = async () => {
       try {
         if (getToken()) {
-          await refreshUser();
+          // Render free tier can cold-start 30–60s; don't block the UI indefinitely.
+          await Promise.race([
+            refreshUser(),
+            new Promise<void>((_, reject) =>
+              window.setTimeout(() => reject(new Error("Session refresh timed out")), 15_000)
+            ),
+          ]);
         }
       } catch {
         clearAuthStorage();

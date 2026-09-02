@@ -45,7 +45,7 @@ function AppLayout() {
   const visibleItems = NAV_ITEMS.filter((item) => user && item.roles.includes(user.role));
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       <Sidebar />
 
       {mobileOpen && (
@@ -95,9 +95,9 @@ function AppLayout() {
         </div>
       )}
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <Navbar onMenuClick={() => setMobileOpen(true)} />
-        <main className="flex-1 p-4 md:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
           <div className="ks-fade-in mx-auto w-full max-w-7xl">
             <Outlet />
           </div>

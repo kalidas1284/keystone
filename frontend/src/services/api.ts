@@ -5,6 +5,7 @@ import { clearAuthStorage, getToken } from "../utils/storage";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 30_000,
   headers: {
     "Content-Type": "application/json",
   },

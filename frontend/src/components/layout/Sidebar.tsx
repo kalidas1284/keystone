@@ -41,12 +41,12 @@ function Sidebar() {
   const visibleItems = NAV_ITEMS.filter((item) => role && item.roles.includes(role));
 
   return (
-    <aside className="hidden w-[15.5rem] shrink-0 bg-[var(--ink)] text-slate-300 md:flex md:flex-col">
+    <aside className="sticky top-0 hidden h-screen w-[15.5rem] shrink-0 flex-col bg-[var(--ink)] text-slate-300 md:flex">
       <div className="border-b border-white/10 px-5 py-5">
         <Logo variant="light" />
       </div>
 
-      <nav className="flex-1 space-y-0.5 p-3">
+      <nav className="flex-1 space-y-0.5 overflow-y-auto p-3">
         <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
           Navigate
         </p>
