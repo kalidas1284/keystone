@@ -24,11 +24,11 @@ function PortalLayout() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-[var(--border)] bg-white/85 backdrop-blur-md">
+      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-white/95 backdrop-blur-md">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
           <Logo />
           <div className="flex items-center gap-3">
-            <NotificationBell />
+            <NotificationBell linkPrefix="/portal" />
             <Link to="/portal/profile" className="hidden text-right sm:block">
               <p className="text-sm font-semibold text-slate-800 hover:text-teal-700">{user?.fullName}</p>
               <p className="text-[11px] uppercase tracking-wide text-slate-500">Customer Portal</p>
