@@ -56,6 +56,7 @@ function AppRouter() {
             <Route path="/portal/requests" element={<PortalRequestsPage />} />
             <Route path="/portal/requests/new" element={<PortalRequestFormPage />} />
             <Route path="/portal/requests/:id" element={<PortalRequestDetailsPage />} />
+            <Route path="/portal/profile" element={<ProfilePage />} />
             <Route path="/portal/invoices" element={<PortalInvoicesPage />} />
             <Route path="/portal/invoices/:id" element={<PortalInvoiceDetailsPage />} />
           </Route>

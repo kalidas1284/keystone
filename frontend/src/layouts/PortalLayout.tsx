@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { ClipboardList, Home, LogOut, PlusCircle } from "lucide-react";
+import { ClipboardList, Home, LogOut, PlusCircle, UserRound } from "lucide-react";
 import Logo from "../components/common/Logo";
 import NotificationBell from "../components/common/NotificationBell";
 import Button from "../components/ui/Button";
@@ -19,6 +19,7 @@ function PortalLayout() {
     { to: "/portal", label: "Home", icon: Home, end: true },
     { to: "/portal/requests", label: "My Requests", icon: ClipboardList, end: false },
     { to: "/portal/requests/new", label: "New Request", icon: PlusCircle, end: false },
+    { to: "/portal/profile", label: "Account", icon: UserRound, end: false },
   ];
 
   return (
@@ -28,10 +29,10 @@ function PortalLayout() {
           <Logo />
           <div className="flex items-center gap-3">
             <NotificationBell />
-            <div className="hidden text-right sm:block">
-              <p className="text-sm font-semibold text-slate-800">{user?.fullName}</p>
+            <Link to="/portal/profile" className="hidden text-right sm:block">
+              <p className="text-sm font-semibold text-slate-800 hover:text-teal-700">{user?.fullName}</p>
               <p className="text-[11px] uppercase tracking-wide text-slate-500">Customer Portal</p>
-            </div>
+            </Link>
             <Button variant="secondary" onClick={handleLogout} className="!px-3 !py-2 text-sm">
               <span className="inline-flex items-center gap-2">
                 <LogOut className="h-4 w-4" />
@@ -71,11 +72,6 @@ function PortalLayout() {
 
       <footer className="border-t border-[var(--border)] py-5 text-center text-xs text-slate-500">
         Keystone Customer Self-Service Portal
-        <div className="mt-1">
-          <Link to="/login" className="font-medium text-teal-700 hover:underline">
-            Staff login
-          </Link>
-        </div>
       </footer>
     </div>
   );
